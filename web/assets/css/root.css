@@ -1,0 +1,64 @@
+:root {
+	/* Theme 1 - Blue */
+	--primary-bg: #e0f0ff;
+	--primary-border: #3399ff;
+	--primary-text: #0066cc;
+	--primary-btn: #3399ff;
+	--primary-btn-hover: #007bff;
+
+	--blue-1: #e0f0ff;
+	--blue-2:rgb(210, 227, 243);
+	--blue-3:rgb(187, 212, 235);
+	--blue-4:rgb(185, 200, 214);
+
+	/* Additional colors for other themes (optional future use) */
+	--pink-bg: #fff0f5;
+	--pink-border: #ff69b4;
+	--pink-text: #ff1493;
+
+	--green-bg: #e8f5e9;
+	--green-border: #66bb6a;
+	--green-text: #2e7d32;
+}
+
+.modal-content.cute-modal {
+	background-color: var(--primary-bg);
+	border: 2px solid var(--primary-border);
+	color: var(--primary-text);
+}
+
+.modal-header.cute-modal-header {
+	background-color: var(--primary-bg);
+	border-bottom: none;
+}
+
+.modal-footer .btn-pink {
+	background-color: var(--primary-btn);
+	color: white;
+	border: none;
+}
+
+.modal-footer .btn-pink:hover {
+	background-color: var(--primary-btn-hover);
+}
+
+.step-title {
+	color: var(--primary-text);
+	font-weight: bold;
+}
+
+body {
+/*	background: url('assets/img/bck.jpg') no-repeat center center fixed; */
+	background-size: cover;
+	height: 100vh;
+}
+
+.btn-theme {
+	background-color: var(--primary-btn);
+	color: white;
+	border: none;
+}
+
+.btn-theme:hover {
+	background-color: var(--primary-btn-hover);
+}
