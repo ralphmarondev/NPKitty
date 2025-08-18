@@ -15,7 +15,7 @@ $currentUserRole = $_SESSION['user_role'] ?? 'guest';
 
 <head>
 	<meta charset="UTF-8">
-	<title>EProfile</title>
+	<title>NPKitty</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="assets/img/logo.png" type="image/x-icon">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -96,7 +96,7 @@ $currentUserRole = $_SESSION['user_role'] ?? 'guest';
 			<hr class="mb-3">
 			<ul class="nav flex-column">
 				<li class="nav-item mb-2">
-					<a class="nav-link <?= $page === 'dashboard' ? 'active' : '' ?>" href="?page=dashboard">Dashboard</a>
+					<a class="nav-link <?= $page === 'dashboard' ? 'active' : '' ?>" href="?page=dashboard">NPK Data</a>
 				</li>
 
 				<li class="nav-item mb-2">
