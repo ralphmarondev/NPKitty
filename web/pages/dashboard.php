@@ -22,7 +22,7 @@
 						<th style="width: 20%;" class="text-center">Actions</th>
 					</tr>
 				</thead>
-				<tbody id="userTableBody">
+				<tbody id="npkDataTableBody">
 					<tr class="text-center">
 						<td colspan="6">Loading...</td>
 					</tr>
@@ -159,40 +159,43 @@
 
 <script>
 	const searchInput = document.getElementById('searchInput');
-	const roleFilter = document.getElementById('roleFilter');
 
-	searchInput.addEventListener('input', fetchFilteredUsers);
-	roleFilter.addEventListener('change', fetchFilteredUsers);
+	searchInput.addEventListener('input', fetchFilteredNpkData);
+	roleFilter.addEventListener('change', fetchFilteredNpkData);
 
-	function fetchFilteredUsers() {
+	function fetchFilteredNpkData() {
 		const searchTerm = searchInput.value.trim().toLowerCase();
-		const role = roleFilter.value;
 
-		fetch('api/user_read_list.php')
+		fetch('api/data_read_list.php')
 			.then(res => res.json())
 			.then(data => {
-				const tbody = document.getElementById('userTableBody');
+				const tbody = document.getElementById('npkDataTableBody');
 				tbody.innerHTML = '';
 
 				if (data.success === "1" && data.users.length > 0) {
-					let filtered = data.users;
+					let filtered = data.npkData;
 
-					if (searchTerm) {
-						filtered = filtered.filter(u => (u.full_name || '').toLowerCase().includes(searchTerm));
-					}
+					// if (searchTerm) {
+					// 	filtered = filtered.filter(u => (u.full_name || '').toLowerCase().includes(searchTerm));
+					// }
 
-					if (role !== 'All') {
-						filtered = filtered.filter(u => u.role === role);
-					}
+					// if (role !== 'All') {
+					// 	filtered = filtered.filter(u => u.role === role);
+					// }
 
 					if (filtered.length > 0) {
 						filtered.forEach((u, i) => {
 							const tr = document.createElement('tr');
 							tr.innerHTML = `
 								<td>${i + 1}</td>
-								<td>${u.full_name || '—'}</td>
-								<td>${u.email || '—'}</td>
-								<td>${u.role || '—'}</td>
+								<td>${u.userId || '—'}</td>
+								<td>${u.pin || '—'}</td>
+								<td>${u.ploatId || '—'}</td>
+								<td>${u.nitrogen || '—'}</td>
+								<td>${u.phosporous || '—'}</td>
+								<td>${u.potassium || '—'}</td>
+								<td>${u.moisture || '—'}</td>
+								<td>${u.timestamp || '—'}</td>
 								<td class="text-center">
 										<button onclick='openViewModal(${u.id})' class="btn btn-sm btn-success me-1">
 												<i class="bi bi-eye"></i>
@@ -208,22 +211,22 @@
 							tbody.appendChild(tr);
 						});
 					} else {
-						tbody.innerHTML = `<tr><td colspan="5" class="text-muted text-center">No users found.</td></tr>`;
+						tbody.innerHTML = `<tr><td colspan="5" class="text-muted text-center">No npk data found.</td></tr>`;
 					}
 				} else {
-					tbody.innerHTML = `<tr><td colspan="5" class="text-muted text-center">No users found.</td></tr>`;
+					tbody.innerHTML = `<tr><td colspan="5" class="text-muted text-center">No npk data found.</td></tr>`;
 				}
 			})
 			.catch(err => {
 				console.error(err);
-				document.getElementById('userTableBody').innerHTML =
+				document.getElementById('npkDataTableBody').innerHTML =
 					`<tr><td colspan="5" class="text-danger text-center">Error loading data.</td></tr>`;
 			});
 	}
 
-	fetchFilteredUsers();
+	fetchFilteredNpkData();
 
-	let selectedUserId = null; // to store the user being updated/deleted
+	let selectedUserId = null; // to store the data being updated/deleted
 
 	function openViewModal(id) {
 		selectedUserId = id;
@@ -277,7 +280,7 @@
 				if (deleteModalInstance) deleteModalInstance.hide();
 
 				if (data.success === "1") {
-					fetchFilteredUsers();
+					fetchFilteredNpkData();
 
 					new bootstrap.Modal(document.getElementById('successModal')).show();
 				} else {
