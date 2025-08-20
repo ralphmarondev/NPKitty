@@ -1,9 +1,9 @@
 <?php
 include './connection.php';
 
-$response = ['success' => '0', 'residents' => []];
+$response = ['success' => '0', 'npkData' => []];
 
-$sql = "SELECT id, userId, pin, plotId, nitrogen, phosporous, potassium, moisture, timestamp FROM sensor_data ORDER BY timestamp";
+$sql = "SELECT id, user_id, pin, plot_id, nitrogen, phosphorus, potassium, moisture, timestamp FROM sensor_data ORDER BY timestamp";
 $result = $mysqli->query($sql);
 
 if ($result && $result->num_rows > 0) {
