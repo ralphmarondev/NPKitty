@@ -25,25 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['user_role'] = $user['role'];
 
         echo json_encode([
-          'success' => '1',
+          'success' => 1,
           'message' => 'Login successful',
           'id' => $user['id'],
           'email' => $user['email'],
           'role' => $user['role']
         ]);
       } else {
-        echo json_encode(['success' => '0', 'error' => 'Invalid email or password']);
+        echo json_encode(['success' => 0, 'error' => 'Invalid email or password']);
       }
     } else {
-      echo json_encode(['success' => '0', 'error' => 'Invalid email or password']);
+      echo json_encode(['success' => 0, 'error' => 'Invalid email or password']);
     }
 
     $sql->close();
   } else {
-    echo json_encode(['success' => '0', 'error' => 'Missing parameters']);
+    echo json_encode(['success' => 0, 'error' => 'Missing parameters']);
   }
 } else {
-  echo json_encode(['success' => '0', 'error' => 'Invalid request method']);
+  echo json_encode(['success' => 0, 'error' => 'Invalid request method']);
 }
 
 $mysqli->close();

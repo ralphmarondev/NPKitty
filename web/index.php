@@ -81,7 +81,7 @@
 				})
 				.then(res => res.json())
 				.then(data => {
-					if (data.success === "1") {
+					if (data.success === 1) {
 						localStorage.setItem("user_id", data.id);
 						localStorage.setItem("user_email", data.email);
 						localStorage.setItem("user_role", data.role);

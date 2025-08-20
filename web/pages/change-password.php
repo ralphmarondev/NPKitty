@@ -72,7 +72,7 @@
 			})
 			.then(res => res.json())
 			.then(data => {
-				if (data.success === "1") {
+				if (data.success === 1) {
 					successToast.show();
 				} else {
 					errorMessage.textContent = data.error || "Something went wrong.";

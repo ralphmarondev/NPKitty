@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
-$response = ["success" => "0", "error" => "Unknown error"];
+$response = ["success" => 0, "error" => "Unknown error"];
 
 try {
 	if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -44,7 +44,7 @@ try {
 	$stmt->bind_param("si", $new_password_hash, $id);
 
 	if ($stmt->execute()) {
-		$response = ["success" => "1"];
+		$response = ["success" => 1];
 	} else {
 		throw new Exception("Database error: " . $stmt->error);
 	}
@@ -52,7 +52,7 @@ try {
 	$stmt->close();
 	$mysqli->close();
 } catch (Exception $e) {
-	$response = ["success" => "0", "error" => $e->getMessage()];
+	$response = ["success" => 0, "error" => $e->getMessage()];
 }
 
 echo json_encode($response);
