@@ -10,7 +10,7 @@ if ($result && $result->num_rows > 0) {
 	while ($row = $result->fetch_assoc()) {
 		$response['npkData'][] = $row;
 	}
-	$response['success'] = '1';
+	$response['success'] = 1;
 }
 
 echo json_encode($response);
