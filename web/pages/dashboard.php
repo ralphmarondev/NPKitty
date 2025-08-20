@@ -141,23 +141,37 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content rounded-4 cute-modal">
+				<div class="modal-header cute-modal-header">
+					<h5 class="modal-title">Success</h5>
+				</div>
+				<div class="modal-body">
+					Resident deleted successfully!
+				</div>
 
-	<div id="successToast" class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3" role="alert">
-		<div class="d-flex">
-			<div class="toast-body">
-				NPK data deleted successfully!
+				<div class="modal-footer border-0">
+					<button type="button" class="btn btn-pink" data-bs-dismiss="modal">Close</button>
+				</div>
 			</div>
-			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
 		</div>
 	</div>
-
-	<div id="errorToast" class="toast align-items-center text-bg-danger border-0 position-fixed bottom-0 end-0 m-3" role="alert">
-		<div class="d-flex">
-			<div class="toast-body" id="errorMessage">Something went wrong</div>
-			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+	<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content rounded-4 cute-modal">
+				<div class="modal-header cute-modal-header">
+					<h5 class="modal-title">Failed</h5>
+				</div>
+				<div class="modal-body" id="errorMessage">
+					<!-- error message will be injected -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-pink" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
 		</div>
 	</div>
-
 </div>
 </div>
 
@@ -273,7 +287,7 @@
 
 	function confirmDelete() {
 		if (!npkId) {
-			console.log('NPK id is emtpy.');
+			console.log('NPK id is empty.');
 			return;
 		}
 
@@ -288,25 +302,27 @@
 			})
 			.then(res => res.json())
 			.then(data => {
-				if (data.success === "1") {
-					const toastEl = document.getElementById('successToast');
-					const toast = new bootstrap.Toast(toastEl);
-					toast.show();
+				const deleteModalInstance = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+				if (deleteModalInstance) deleteModalInstance.hide();
 
-					const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
-					if (modal) modal.hide();
-
-					setTimeout(() => location.reload(), 1500);
+				if (data.success == 1) {
+					document.querySelector('#successModal .modal-body').textContent = "NPK data deleted successfully!";
+					const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+					successModal.show();
+					document.querySelector('#successModal .btn[data-bs-dismiss="modal"]').addEventListener("click", () => {
+						location.reload();
+					});
 				} else {
-					document.getElementById('errorMessage').textContent = data.error || "Delete failed.";
-					const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
-					errorToast.show();
+					document.getElementById('errorMessage').textContent = data.message || "Delete failed.";
+					const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+					errorModal.show();
 				}
 			})
 			.catch(err => {
-				document.getElementById('errorMessage').textContent = "Server error: " + err;
-				const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
-				errorToast.show();
+				console.error(err);
+				document.getElementById('errorMessage').textContent = "Something went wrong while deleting.";
+				const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+				errorModal.show();
 			});
 	}
 </script>

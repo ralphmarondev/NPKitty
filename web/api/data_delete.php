@@ -2,7 +2,7 @@
 include './connection.php';
 header('Content-Type: application/json');
 
-$response = ["success" => 0, "message" => ""];
+// $response = ["success" => 0, "message" => ""];
 
 try {
     $data = json_decode(file_get_contents("php://input"), true);
