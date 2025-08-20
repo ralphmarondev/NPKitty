@@ -136,7 +136,7 @@ $currentUserRole = $_SESSION['user_role'] ?? 'guest';
 			<div class="p-4" id="pageContent">
 				<?php
 				// Allowed pages
-				$allowedPages = ['dashboard', 'change-password'];
+				$allowedPages = ['dashboard', 'change-password', 'npk-data-update'];
 
 				// Default to 404 if not allowed
 				$pageFile = in_array($page, $allowedPages) ? "pages/$page.php" : "pages/404.php";
