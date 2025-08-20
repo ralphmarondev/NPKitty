@@ -3,7 +3,7 @@ include './connection.php';
 
 $response = ['success' => '0', 'npkData' => []];
 
-$sql = "SELECT id, user_id, pin, plot_id, nitrogen, phosphorus, potassium, moisture, timestamp FROM sensor_data ORDER BY timestamp";
+$sql = "SELECT id, user_id, pin, plot_id, nitrogen, phosphorus, potassium, moisture, timestamp FROM sensor_data WHERE is_deleted = 0 ORDER BY timestamp";
 $result = $mysqli->query($sql);
 
 if ($result && $result->num_rows > 0) {
