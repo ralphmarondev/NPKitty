@@ -7,7 +7,7 @@
 
 const char* ssid = "COE_LAB";
 const char* password = "Lablangkasimakulitka!"; 
-const char* serverName = "https://npkitty.infinityfreeapp.com/receive.php";
+const char* serverName = "https://npkitty.great-site.net/receive.php";
 
 #define SENSOR_RX_PIN 16
 #define SENSOR_TX_PIN 17

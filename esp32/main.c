@@ -5,7 +5,7 @@ const char* ssid = "YOUR_WIFI";
 const char* password = "YOUR_PASSWORD";
 
 // Change this to your InfinityFree URL
-const char* serverName = "https://npkitty.infinityfreeapp.com/receive.php";
+const char* serverName = "https://npkitty.great-site.net/receive.php";
 
 void setup() {
   Serial.begin(115200);
