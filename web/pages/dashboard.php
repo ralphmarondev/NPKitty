@@ -36,7 +36,6 @@
 		</div>
 	</div>
 
-	<!-- View Modal -->
 	<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
 		aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -92,8 +91,6 @@
 			</div>
 		</div>
 	</div>
-
-	<!-- Delete Modal -->
 	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
 		aria-hidden="true" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
@@ -187,6 +184,8 @@
 <script>
 	const startDateInput = document.getElementById('startDate');
 	const endDateInput = document.getElementById('endDate');
+	const userRole = localStorage.getItem("user_role") || "";
+	const currentUserId = localStorage.getItem("user_id") || "";
 
 	startDateInput.addEventListener('change', fetchFilteredNpkData);
 	endDateInput.addEventListener('change', fetchFilteredNpkData);
@@ -203,11 +202,14 @@
 
 				if (data.success === 1 && data.npkData.length > 0) {
 					let filtered = data.npkData;
+
+					if (userRole !== "Admin") {
+						filtered = filtered.filter(item => item.user_id == currentUserId);
+					}
 					const parseTimestamp = (ts) => {
-						// Replace space with "T" so JS Date can parse it
 						return new Date(ts.replace(" ", "T"));
 					};
-					// filter by date range
+
 					if (startDate && endDate) {
 						filtered = filtered.filter(item => {
 							const itemDate = parseTimestamp(item.timestamp);
