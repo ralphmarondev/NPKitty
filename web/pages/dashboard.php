@@ -77,8 +77,8 @@
 						</div>
 					</div>
 				</div>
-				<div class="modal-footer border-0">
-					<button type="button" class="btn btn-light-gray" data-bs-dismiss="modal">Close</button>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-pink" data-bs-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
