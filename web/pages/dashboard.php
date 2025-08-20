@@ -1,15 +1,11 @@
 <div class="card shadow p-4 mb-4" style="min-height: 500px;">
 	<div class="container">
-
 		<h3 class="step-title">NPK Data</h3>
-
-		<!-- Filters -->
 		<div class="row mb-2">
 			<div class="col-md-12 mb-2">
 				<input type="text" class="form-control" id="searchInput" placeholder="Search by date. (2025-08-01)">
 			</div>
 		</div>
-
 		<div class="table-responsive">
 			<table class="table table-bordered table-hover align-middle">
 				<thead class="table-light">
@@ -28,6 +24,63 @@
 					</tr>
 				</tbody>
 			</table>
+		</div>
+	</div>
+
+	<!-- View Modal -->
+	<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
+		aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+			<div class="modal-content rounded-4 cute-modal">
+				<div class="modal-header cute-modal-header">
+					<h5 class="modal-title" id="viewModalLabel">View NPK Data</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-section form-section-basic">
+						<div class="row">
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Nitrogen</label>
+								<input type="text" class="form-control" name="view_nitrogen" id="view_nitrogen"
+									placeholder="Enter nitrogen level" readonly>
+							</div>
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Phosporous</label>
+								<input type="text" class="form-control" name="view_phosphorus" id="view_phosphorus"
+									placeholder="Enter phosphorus level" readonly>
+							</div>
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Potassium</label>
+								<input type="text" class="form-control" name="view_potassium" id="view_potassium"
+									placeholder="Enter potassium level" readonly>
+							</div>
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Moisture</label>
+								<input type="text" class="form-control" name="view_moisture" id="view_moisture"
+									placeholder="Enter moisture level" readonly>
+							</div>
+							<div class="mb-3 form-group col-md-6">
+								<label>User Id</label>
+								<input class="form-control" name="view_user_id" id="view_user_id" placeholder="Enter user id"
+									readonly>
+							</div>
+							<div class="mb-3 form-group col-md-6">
+								<label>Plot Id</label>
+								<input class="form-control" name="view_plot_id" id="view_plot_id" placeholder="Enter plot id"
+									readonly>
+							</div>
+							<div class="mb-3 form-group col-md-12">
+								<label>Timestamp</label>
+								<input class="form-control" name="view_timestamp" id="view_timestamp"
+									placeholder="Enter timestamp" readonly>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer border-0">
+					<button type="button" class="btn btn-light-gray" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -59,7 +112,7 @@
 								<td class="text-center">${u.potassium || '-'}</td>
 								<td class="text-center">${u.timestamp || '-'}</td>
 								<td class="text-center">
-										<button onclick='openViewModal(${u.id})' class="btn btn-sm btn-success me-1">
+										<button onclick='viewNpkDetails(${u.id})' class="btn btn-sm btn-success me-1">
 												<i class="bi bi-eye"></i>
 										</button>
 										<a href="home.php?page=npk-data-update&id=${u.id}" class="btn btn-sm btn-primary me-1" title="Update">
@@ -87,4 +140,30 @@
 	}
 
 	fetchFilteredNpkData();
+
+	function viewNpkDetails(id) {
+		const modal = new bootstrap.Modal(document.getElementById('viewModal'));
+		fetch(`api/data_read_details.php?id=${id}`)
+			.then(res => res.json())
+			.then(data => {
+				if (data.success === "1") {
+					const npkData = data.npkData;
+					document.getElementById('view_nitrogen').value = npkData.nitrogen;
+					document.getElementById('view_phosphorus').value = npkData.phosphorus;
+					document.getElementById('view_potassium').value = npkData.potassium;
+					document.getElementById('view_moisture').value = npkData.moisture;
+					document.getElementById('view_timestamp').value = npkData.timestamp;
+					document.getElementById('view_user_id').value = npkData.user_id;
+					document.getElementById('view_plot_id').value = npkData.plot_id;
+
+					modal.show();
+				} else {
+					alert("NPK data not found.");
+				}
+			})
+			.catch(err => {
+				console.error(err);
+				alert("Error loading npk data.");
+			});
+	}
 </script>
