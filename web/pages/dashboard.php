@@ -83,12 +83,72 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Delete Modal -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+		aria-hidden="true" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+			<div class="modal-content rounded-4 cute-modal">
+				<div class="modal-header cute-modal-header">
+					<h5 class="modal-title" id="deleteModalLabel">Delete NPK Data</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="form-section form-section-basic">
+						<div class="row">
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Nitrogen</label>
+								<input type="text" class="form-control" name="delete_nitrogen" id="delete_nitrogen"
+									placeholder="Enter nitrogen level" readonly>
+							</div>
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Phosporous</label>
+								<input type="text" class="form-control" name="delete_phosphorus" id="delete_phosphorus"
+									placeholder="Enter phosphorus level" readonly>
+							</div>
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Potassium</label>
+								<input type="text" class="form-control" name="delete_potassium" id="delete_potassium"
+									placeholder="Enter potassium level" readonly>
+							</div>
+							<div class="mb-3 col-md-6">
+								<label class="form-label">Moisture</label>
+								<input type="text" class="form-control" name="delete_moisture" id="delete_moisture"
+									placeholder="Enter moisture level" readonly>
+							</div>
+							<div class="mb-3 form-group col-md-6">
+								<label>User Id</label>
+								<input class="form-control" name="delete_user_id" id="delete_user_id" placeholder="Enter user id"
+									readonly>
+							</div>
+							<div class="mb-3 form-group col-md-6">
+								<label>Plot Id</label>
+								<input class="form-control" name="delete_plot_id" id="delete_plot_id" placeholder="Enter plot id"
+									readonly>
+							</div>
+							<div class="mb-3 form-group col-md-12">
+								<label>Timestamp</label>
+								<input class="form-control" name="delete_timestamp" id="delete_timestamp"
+									placeholder="Enter timestamp" readonly>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer border-0">
+					<button type="button" class="btn btn-light-gray" data-bs-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-pink" onclick="confirmDelete()">Delete</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 </div>
 
 <script>
 	const searchInput = document.getElementById('searchInput');
 	searchInput.addEventListener('input', fetchFilteredNpkData);
+
+	let npkId = null;
 
 	function fetchFilteredNpkData() {
 		const searchTerm = searchInput.value.trim().toLowerCase();
@@ -118,7 +178,7 @@
 										<a href="home.php?page=npk-data-update&id=${u.id}" class="btn btn-sm btn-primary me-1" title="Update">
 												<i class="bi bi-pencil-square"></i>
 										</a>
-										<button onclick="openDeleteModal(${u.id})" class="btn btn-sm btn-danger">
+										<button onclick="deleteNpkDetails(${u.id})" class="btn btn-sm btn-danger">
 												<i class="bi bi-trash"></i>
 										</button>
 								</td>
@@ -164,6 +224,70 @@
 			.catch(err => {
 				console.error(err);
 				alert("Error loading npk data.");
+			});
+	}
+
+	function deleteNpkDetails(id) {
+		npkId = id;
+		const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+		fetch(`api/data_read_details.php?id=${id}`)
+			.then(res => res.json())
+			.then(data => {
+				if (data.success === "1") {
+					const npkData = data.npkData;
+					document.getElementById('delete_nitrogen').value = npkData.nitrogen;
+					document.getElementById('delete_phosphorus').value = npkData.phosphorus;
+					document.getElementById('delete_potassium').value = npkData.potassium;
+					document.getElementById('delete_moisture').value = npkData.moisture;
+					document.getElementById('delete_timestamp').value = npkData.timestamp;
+					document.getElementById('delete_user_id').value = npkData.user_id;
+					document.getElementById('delete_plot_id').value = npkData.plot_id;
+
+					modal.show();
+				} else {
+					alert("NPK data not found.");
+				}
+			})
+			.catch(err => {
+				console.error(err);
+				alert("Error loading npk data.");
+			});
+	}
+
+	function confirmDelete() {
+		if (!npkId) {
+			console.log('NPK id is emtpy.');
+			return;
+		}
+
+		fetch('api/data_delete.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					id: npkId
+				})
+			})
+			.then(res => res.json())
+			.then(data => {
+				if (data.success == 1) {
+					document.querySelector('#successModal .modal-body').textContent = "Npk data deleted successfully!";
+
+					const deleteModalInstance = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+					if (deleteModalInstance) deleteModalInstance.hide();
+
+					successModal.show();
+					document.getElementById('goToDashboard').onclick = () => location.reload();
+				} else {
+					document.getElementById('errorMessage').textContent = data.message || "Delete failed.";
+					errorModal.show();
+				}
+			})
+			.catch(err => {
+				console.error(err);
+				document.getElementById('errorMessage').textContent = "Something went wrong while deleting.";
+				errorModal.show();
 			});
 	}
 </script>
