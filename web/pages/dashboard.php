@@ -141,6 +141,23 @@
 			</div>
 		</div>
 	</div>
+
+	<div id="successToast" class="toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 m-3" role="alert">
+		<div class="d-flex">
+			<div class="toast-body">
+				NPK data deleted successfully!
+			</div>
+			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+		</div>
+	</div>
+
+	<div id="errorToast" class="toast align-items-center text-bg-danger border-0 position-fixed bottom-0 end-0 m-3" role="alert">
+		<div class="d-flex">
+			<div class="toast-body" id="errorMessage">Something went wrong</div>
+			<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+		</div>
+	</div>
+
 </div>
 </div>
 
@@ -271,23 +288,25 @@
 			})
 			.then(res => res.json())
 			.then(data => {
-				if (data.success == 1) {
-					document.querySelector('#successModal .modal-body').textContent = "Npk data deleted successfully!";
+				if (data.success === "1") {
+					const toastEl = document.getElementById('successToast');
+					const toast = new bootstrap.Toast(toastEl);
+					toast.show();
 
-					const deleteModalInstance = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
-					if (deleteModalInstance) deleteModalInstance.hide();
+					const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+					if (modal) modal.hide();
 
-					successModal.show();
-					document.getElementById('goToDashboard').onclick = () => location.reload();
+					setTimeout(() => location.reload(), 1500);
 				} else {
-					document.getElementById('errorMessage').textContent = data.message || "Delete failed.";
-					errorModal.show();
+					document.getElementById('errorMessage').textContent = data.error || "Delete failed.";
+					const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+					errorToast.show();
 				}
 			})
 			.catch(err => {
-				console.error(err);
-				document.getElementById('errorMessage').textContent = "Something went wrong while deleting.";
-				errorModal.show();
+				document.getElementById('errorMessage').textContent = "Server error: " + err;
+				const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+				errorToast.show();
 			});
 	}
 </script>
