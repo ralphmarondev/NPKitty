@@ -237,7 +237,7 @@
 		fetch(`api/data_read_details.php?id=${id}`)
 			.then(res => res.json())
 			.then(data => {
-				if (data.success === "1") {
+				if (data.success === 1) {
 					const npkData = data.npkData;
 					document.getElementById('view_nitrogen').value = npkData.nitrogen;
 					document.getElementById('view_phosphorus').value = npkData.phosphorus;
@@ -264,7 +264,7 @@
 		fetch(`api/data_read_details.php?id=${id}`)
 			.then(res => res.json())
 			.then(data => {
-				if (data.success === "1") {
+				if (data.success === 1) {
 					const npkData = data.npkData;
 					document.getElementById('delete_nitrogen').value = npkData.nitrogen;
 					document.getElementById('delete_phosphorus').value = npkData.phosphorus;

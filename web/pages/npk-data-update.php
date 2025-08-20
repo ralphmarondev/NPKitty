@@ -1,10 +1,10 @@
 <?php
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-	echo "<div class='alert alert-danger'>User ID is missing.</div>";
+	echo "<div class='alert alert-danger'>NPK data ID is missing.</div>";
 	return;
 }
 
-$userId = intval($_GET['id']);
+$npkId = intval($_GET['id']);
 ?>
 
 <div class="card shadow p-4 mb-4" style="min-height: 500px;">
@@ -45,6 +45,25 @@ $userId = intval($_GET['id']);
 			</div>
 			<button type="submit" class="btn btn-primary w-100 mt-3" id="submitBtn">Update NPK Data</button>
 		</form>
+		<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+			<div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body">
+						You're logged in successfully!
+					</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+
+			<div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+				<div class="d-flex">
+					<div class="toast-body" id="errorMessage">
+						Something went wrong.
+					</div>
+					<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -58,7 +77,8 @@ $userId = intval($_GET['id']);
 		submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Updating...`;
 
 		const formData = new FormData(form);
-		const id = <?= json_encode($userId) ?>;
+		const id = <?= json_encode($npkId) ?>;
+		formData.append('id', id);
 
 		fetch('api/data_update.php', {
 				method: 'POST',
@@ -66,30 +86,35 @@ $userId = intval($_GET['id']);
 			})
 			.then(res => res.json())
 			.then(data => {
-				if (data.success === '1') {
-					alert(data.message);
-					form.reset();
+				if (data.success === 1) {
+					const successToast = new bootstrap.Toast(document.getElementById('successToast'));
+					document.querySelector('#successToast .toast-body').textContent = data.message;
+					successToast.show();
 				} else {
-					alert('Error: ' + data.error);
+					const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+					document.getElementById('errorMessage').textContent = data.error;
+					errorToast.show();
 				}
 			})
 			.catch(err => {
 				console.error(err);
-				alert('Something went wrong. Check console.');
+				const errorToast = new bootstrap.Toast(document.getElementById('errorToast'));
+				document.getElementById('errorMessage').textContent = "Something went wrong.";
+				errorToast.show();
 			})
 			.finally(() => {
 				submitBtn.disabled = false;
-				submitBtn.innerHTML = "Update NPK data information";
+				submitBtn.innerHTML = "Update NPK Data";
 			});
 	});
 
 	document.addEventListener("DOMContentLoaded", () => {
-		const id = <?= json_encode($userId) ?>;
+		const id = <?= json_encode($npkId) ?>;
 
 		fetch(`api/data_read_details.php?id=${id}`)
 			.then(res => res.json())
 			.then(data => {
-				if (data.success === "1") {
+				if (data.success === 1) {
 					const npkData = data.npkData;
 					document.getElementById('update_nitrogen').value = npkData.nitrogen;
 					document.getElementById('update_phosphorus').value = npkData.phosphorus;

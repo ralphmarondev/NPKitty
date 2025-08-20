@@ -18,7 +18,7 @@ if ($id > 0) {
 		$result = $stmt->get_result();
 
 		if ($row = $result->fetch_assoc()) {
-			$response['success'] = '1';
+			$response['success'] = 1;
 			$response['npkData'] = $row;
 		} else {
 			$response['error'] = "Record not found";
