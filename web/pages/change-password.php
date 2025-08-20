@@ -19,6 +19,26 @@
 			<button type="submit" class="btn btn-primary" id="submitBtn">Update Password</button>
 	</div>
 	</form>
+
+	<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+		<div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body">
+					Password updated successfully!
+				</div>
+				<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+		</div>
+
+		<div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+			<div class="d-flex">
+				<div class="toast-body" id="errorMessage">
+					Something went wrong.
+				</div>
+				<button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+		</div>
+	</div>
 </div>
 </div>
 
@@ -43,6 +63,8 @@
 		submitBtn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Updating...`;
 
 		const formData = new FormData(form);
+		const userId = localStorage.getItem('user_id');
+		formData.append('id', userId);
 
 		fetch('api/user_change_password.php', {
 				method: 'POST',
@@ -51,7 +73,6 @@
 			.then(res => res.json())
 			.then(data => {
 				if (data.success === "1") {
-
 					successToast.show();
 				} else {
 					errorMessage.textContent = data.error || "Something went wrong.";
