@@ -15,8 +15,8 @@
 			<h3 class="text-center mb-4 step-title">Welcome Back</h3>
 			<form id="login-form">
 				<div class="mb-3">
-					<label for="email" class="form-label">Email</label>
-					<input type="email" class="form-control form-control" id="email" name="email" placeholder="Enter email"
+					<label for="email" class="form-label">Username</label>
+					<input type="number" class="form-control form-control" id="email" name="email" placeholder="Enter username"
 						required>
 				</div>
 				<div class="mb-4">

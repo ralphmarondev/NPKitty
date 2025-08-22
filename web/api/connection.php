@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "npkitty";
+$dbname = "npk_monitoring";
 
 $mysqli = new mysqli($servername, $username, $password, $dbname);
 
